@@ -3,18 +3,13 @@ services:
     name: mcq-club-app
     env: docker
     dockerfilePath: ./Dockerfile
-    branch: main   # change if you use a different branch
-    plan: starter  # choose appropriate plan
-    buildCommand: ""   # optional
-    startCommand: ""   # supervisord is entrypoint/cmd in Dockerfile
-
-    # mount a persistent disk at /var/lib/mysql (ensure you create disk in Render UI or via render CLI)
-    disks:
-      - name: mysql-data
-        mountPath: /var/lib/mysql
-        sizeGb: 10
+    branch: main
+    plan: starter
+    buildCommand: ""
+    startCommand: ""
 
     envVars:
+      # Local MariaDB vars (you probably don't need these anymore, but ok to leave)
       - key: MYSQL_ROOT_PASSWORD
         sync: false
       - key: MYSQL_DATABASE
@@ -23,5 +18,19 @@ services:
         value: mcq_user
       - key: MYSQL_PASSWORD
         sync: false
+
+      # Your app's BASE_URL
       - key: BASE_URL
-        value: http://example.com    # update after getting service URL
+        value: http://example.com
+
+      # 🔹 Aiven DB config used by config.php
+      - key: DB_HOST
+        value: ai-careerpathway2k25-53e5.b.aivencloud.com
+      - key: DB_PORT
+        value: "19542"
+      - key: DB_NAME
+        value: mcq_app
+      - key: DB_USER
+        value: avnadmin
+      - key: DB_PASS
+        sync: false    # secret, set in dashboard

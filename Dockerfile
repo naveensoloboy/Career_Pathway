@@ -5,10 +5,9 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV LANG=C.UTF-8
 ENV PORT=10000
 
-# install packages: mariadb-server, php and extensions, supervisor, git, unzip, etc
+# install packages:  php and extensions, supervisor, git, unzip, etc
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
-    mariadb-server \
     php8.1-cli php8.1-mysql php8.1-xml php8.1-mbstring php8.1-curl \
     curl ca-certificates supervisor net-tools procps \
     unzip \
