@@ -57,13 +57,27 @@ date_default_timezone_set('Asia/Kolkata');
 ////////////////////////////////////
 // DATABASE SETTINGS
 ////////////////////////////////////
-$dbHost    = 'ai-careerpathway2k25-53e5.b.aivencloud.com';
-$dbName    = 'mcq_app';
-$dbUser    = 'avnadmin';
-$dbPort    = 19542;
+
+// Defaults (will be used locally if env not set)
+$dbHost    = getenv('DB_HOST') ?: 'ai-careerpathway2k25-53e5.b.aivencloud.com';
+$dbPort    = getenv('DB_PORT') ?: 19542;
+$dbName    = getenv('DB_NAME') ?: 'mcq_app';
+$dbUser    = getenv('DB_USER') ?: 'avnadmin';
 $dbCharset = 'utf8mb4';
 
+// 1) Try to get password from environment (Render, prod)
+$dbPass = getenv('DB_PASS');
 
+// 2) If not set (local XAMPP), fallback to secrets.php (untracked)
+if (!$dbPass) {
+    $secretsFile = __DIR__ . '/secrets.php';
+    if (file_exists($secretsFile)) {
+        require $secretsFile;   // defines $dbPass locally
+    } else {
+        // TEMP: clear error so you see it in browser instead of silent failure
+        die("ERROR: DB_PASS not set in environment and config/secrets.php not found.");
+    }
+}
 
 $dsn = "mysql:host={$dbHost};port={$dbPort};dbname={$dbName};charset={$dbCharset}";
 
@@ -78,6 +92,7 @@ try {
     echo "Database connection failed: " . htmlspecialchars($e->getMessage());
     exit;
 }
+
 
 
 ////////////////////////////////////
