@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: mcq-club-app
+    env: docker
+    dockerfilePath: ./Dockerfile
+    branch: main   # change if you use a different branch
+    plan: starter  # choose appropriate plan
+    buildCommand: ""   # optional
+    startCommand: ""   # supervisord is entrypoint/cmd in Dockerfile
+
+    # mount a persistent disk at /var/lib/mysql (ensure you create disk in Render UI or via render CLI)
+    disks:
+      - name: mysql-data
+        mountPath: /var/lib/mysql
+        sizeGb: 10
+
+    envVars:
+      - key: MYSQL_ROOT_PASSWORD
+        sync: false
+      - key: MYSQL_DATABASE
+        value: mcq_app
+      - key: MYSQL_USER
+        value: mcq_user
+      - key: MYSQL_PASSWORD
+        sync: false
+      - key: BASE_URL
+        value: http://example.com    # update after getting service URL

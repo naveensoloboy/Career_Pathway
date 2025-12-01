@@ -1,0 +1,152 @@
+/* =========================================
+   Auth Page Specific Styles
+   ========================================= */
+
+/* Center the main container and give it a 'card' look */
+main.container {
+    max-width: 420px; /* Limits width for a nice form shape */
+    margin: 4rem auto; /* Vertical spacing */
+    background-color: #ffffff;
+    padding: 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0,0,0,0.02);
+}
+
+/* Heading */
+h2 {
+    text-align: center;
+    color: #111827; /* Very dark gray */
+    margin-bottom: 2rem;
+    font-size: 1.75rem;
+    font-weight: 700;
+}
+
+/* =========================================
+   Form Styling
+   ========================================= */
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+/* HIDE the <br> tags from the HTML so we can control spacing with CSS */
+form br {
+    display: none;
+}
+
+/* Labels */
+label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #374151; /* Medium gray */
+    margin-bottom: 0.5rem;
+    margin-top: 1rem;
+}
+
+/* First label shouldn't have top margin */
+label:first-of-type {
+    margin-top: 0;
+}
+
+/* Inputs */
+input[type="text"],
+input[type="password"],
+input[type="email"] {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    background-color: #fff;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+input:focus {
+    outline: none;
+    border-color: #2563eb; /* Primary Blue */
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+/* Submit Button */
+button[type="submit"] {
+    margin-top: 2rem;
+    width: 100%;
+    padding: 0.875rem;
+    background-color: #2563eb;
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+button[type="submit"]:hover {
+    background-color: #1d4ed8;
+}
+
+/* =========================================
+   Utilities & Links
+   ========================================= */
+
+/* Forgot Password Link area */
+main.container > p {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+    color: #6b7280;
+}
+
+a {
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Error Messages Box */
+.errors {
+    background-color: #fef2f2;
+    border: 1px solid #fee2e2;
+    border-left: 4px solid #ef4444; /* Red accent */
+    border-radius: 6px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.errors ul {
+    margin: 0;
+    padding-left: 1.25rem;
+    color: #b91c1c;
+    font-size: 0.95rem;
+}
+
+.errors li {
+    margin-bottom: 0.25rem;
+}
+
+/* =========================================
+   Mobile Responsiveness
+   ========================================= */
+@media (max-width: 640px) {
+    main.container {
+        margin: 1.5rem auto;
+        padding: 1.5rem;
+        max-width: 92%; /* Slightly wider on mobile */
+        box-shadow: none; /* Flatter look for mobile */
+        border: 1px solid #e5e7eb;
+    }
+    
+    h2 {
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+}

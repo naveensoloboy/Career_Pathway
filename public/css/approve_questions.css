@@ -1,0 +1,124 @@
+/* =========================================
+   Admin Data Tables
+   ========================================= */
+
+/* Wrapper to allow horizontal scroll on small screens */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    margin-bottom: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    border: 1px solid #e5e7eb;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #ffffff;
+    font-size: 0.95rem;
+    min-width: 600px; /* Forces scroll on very small screens if content is wide */
+}
+
+/* Header Styles */
+th {
+    background-color: #f9fafb;
+    color: #374151;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    padding: 1rem 1.5rem;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+/* Cell Styles */
+td {
+    padding: 1rem 1.5rem;
+    color: #1f2937;
+    border-bottom: 1px solid #e5e7eb;
+    vertical-align: middle;
+}
+
+/* Zebra Striping */
+tr:nth-child(even) {
+    background-color: #f8fafc;
+}
+
+tr:hover {
+    background-color: #f1f5f9;
+}
+
+/* =========================================
+   Table Actions (Buttons)
+   ========================================= */
+td form {
+    margin: 0;
+    display: inline-block;
+}
+
+td button {
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+/* Approve Button Style */
+button[name="approve"] {
+    background-color: #dcfce7; /* Light green bg */
+    color: #166534;            /* Dark green text */
+    border-color: #bbf7d0;
+}
+
+button[name="approve"]:hover {
+    background-color: #166534;
+    color: white;
+}
+
+/* Delete/Reject Button Style (Future Proofing) */
+button.delete-btn {
+    background-color: #fee2e2;
+    color: #991b1b;
+    border-color: #fecaca;
+}
+
+button.delete-btn:hover {
+    background-color: #991b1b;
+    color: white;
+}
+
+/* =========================================
+   Typography & Alerts
+   ========================================= */
+h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    color: var(--text-main);
+}
+
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+    background: white;
+    border-radius: 8px;
+    color: var(--text-muted);
+    border: 1px dashed #d1d5db;
+}
+
+/* =========================================
+   Mobile Optimization
+   ========================================= */
+@media (max-width: 640px) {
+    th, td {
+        padding: 0.75rem 1rem;
+    }
+    
+    h2 {
+        font-size: 1.5rem;
+    }
+}

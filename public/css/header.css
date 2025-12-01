@@ -1,0 +1,88 @@
+/* =========================================
+   Header & Navigation
+   ========================================= */
+header {
+    background-color: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+    box-shadow: var(--shadow-sm);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+
+/* Override generic container padding for header */
+header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1.5rem;
+}
+
+/* Logo */
+header a strong {
+    font-size: 1.25rem;
+    color: var(--primary-color);
+    font-weight: 800;
+    text-decoration: none;
+}
+
+header a {
+    text-decoration: none;
+}
+
+/* Navigation Container */
+header nav {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.95rem;
+    color: var(--text-muted);
+}
+
+/* Nav Links */
+header nav a {
+    color: var(--text-muted);
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+header nav a:hover {
+    color: var(--primary-color);
+}
+
+/* Welcome User Text */
+header nav span {
+    color: var(--text-main);
+    font-size: 0.9rem;
+    margin-right: 0.5rem;
+    padding-right: 1rem;
+    border-right: 1px solid #e5e7eb;
+}
+
+/* =========================================
+   Header Mobile Optimization
+   ========================================= */
+@media (max-width: 640px) {
+    header .container {
+        flex-direction: column;
+        gap: 0.75rem;
+        padding: 1rem;
+    }
+    
+    header nav {
+        flex-wrap: wrap;
+        justify-content: center;
+        text-align: center;
+        line-height: 1.8;
+    }
+    
+    header nav span {
+        display: block;
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #e5e7eb;
+        padding-bottom: 0.5rem;
+        margin-bottom: 0.25rem;
+        margin-right: 0;
+    }
+}

@@ -1,0 +1,193 @@
+/* public/css/admin_dashboard.css
+   Responsive Admin Dashboard styles — mobile-first and adaptive
+   Works with your existing main.css variables; defines fallbacks.
+*/
+
+/* ---------------------------
+   CSS variables (with fallbacks)
+   --------------------------- */
+:root{
+  --primary-color: #2563eb;        /* blue accent */
+  --bg-panel: #ffffff;
+  --text-main: #0f172a;
+  --text-muted: #6b7280;
+  --card-radius: 10px;
+  --card-padding: 1.25rem;
+  --card-gap: 1rem;
+  --card-border: 1px solid #e6e8eb;
+  --shadow-sm: 0 2px 6px rgba(10,20,40,0.06);
+  --shadow-md: 0 10px 24px rgba(8,12,32,0.08);
+  --max-width: 1200px;
+}
+
+/* ---------------------------
+   Base / Reset for this module
+   --------------------------- */
+h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin: 1.25rem 0 1.25rem;
+    text-align: center;
+}
+
+h2::after {
+    content: '';
+    display: block;
+    width: 44px;
+    height: 4px;
+    background-color: var(--primary-color);
+    margin: 0.6rem auto 0;
+    border-radius: 2px;
+}
+
+/* container scope (keeps dashboard narrow on very wide screens) */
+.container {
+    width: 94%;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 1rem 0 3rem;
+}
+
+/* Cards grid - mobile first: single column */
+.cards {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--card-gap);
+    align-items: stretch;
+}
+
+/* Individual card */
+.card {
+    background-color: var(--bg-panel);
+    border-radius: var(--card-radius);
+    padding: var(--card-padding);
+    box-shadow: var(--shadow-sm);
+    border: var(--card-border);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 120px;
+    transition: transform .16s ease, box-shadow .16s ease;
+}
+
+/* Accent left border on wider screens will be controlled in breakpoints */
+.card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-md);
+}
+
+.card h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin: 0 0 .5rem 0;
+}
+
+.card p {
+    font-size: .95rem;
+    color: var(--text-muted);
+    margin: 0 0 1rem 0;
+    line-height: 1.4;
+}
+
+/* Action link/button */
+.card a {
+    display: inline-block;
+    padding: .55rem 1rem;
+    font-size: .95rem;
+    font-weight: 700;
+    text-decoration: none;
+    color: var(--primary-color);
+    background: linear-gradient(180deg, rgba(37,99,235,0.06), rgba(37,99,235,0.02));
+    border-radius: 8px;
+    border: 1px solid rgba(37,99,235,0.06);
+    transition: background .12s, color .12s, transform .12s;
+}
+.card a:hover {
+    background: var(--primary-color);
+    color: #fff;
+}
+
+/* small adjustments for accessibility */
+.card a:focus { outline: 3px solid rgba(37,99,235,0.12); outline-offset: 3px; }
+
+/* ---------------------------
+   Tablet / Medium screens
+   --------------------------- */
+@media (min-width: 640px) {
+    h2 { font-size: 1.75rem; margin-bottom: 1.75rem; }
+
+    .cards {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.25rem;
+    }
+
+    .card { padding: 1.5rem; min-height:140px; }
+
+    /* move accent to left for visual emphasis on larger devices */
+    .card { border-left: 4px solid transparent; }
+    .card:hover { border-left-color: var(--primary-color); }
+}
+
+/* ---------------------------
+   Desktop / Large screens
+   --------------------------- */
+@media (min-width: 900px) {
+    .cards {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.75rem;
+    }
+
+    .card { padding: 1.5rem; }
+
+    /* stronger left accent for desktop */
+    .card { border-left-width: 5px; border-left-style: solid; border-left-color: rgba(0,0,0,0.03); }
+    .card:hover { border-left-color: var(--primary-color); }
+}
+
+/* ---------------------------
+   Extra wide screens
+   --------------------------- */
+@media (min-width: 1200px) {
+    .container { width: 86%; }
+    .cards { gap: 2rem; }
+    .card { padding: 2rem; }
+    h2 { font-size: 2rem; }
+}
+
+/* ---------------------------
+   Utility tweaks for small viewports
+   --------------------------- */
+@media (max-width: 480px) {
+    h2 { font-size: 1.25rem; margin-bottom: 1rem; }
+    .card { padding: 1rem; border-left: none; border-top: 4px solid var(--primary-color); text-align: center; }
+    .card p { font-size: .92rem; }
+    .card a { width: 100%; display:block; text-align:center; padding: .75rem; border-radius: 8px; }
+}
+
+/* ---------------------------
+   High-contrast / reduced motion preferences
+   --------------------------- */
+@media (prefers-reduced-motion: reduce) {
+    .card, .card:hover { transition: none; transform: none; box-shadow: none; }
+}
+
+/* ---------------------------
+   Minor helpers
+   --------------------------- */
+.center { text-align:center; }
+.margin-bottom-sm { margin-bottom:.75rem; }
+.small { font-size:.9rem; color:var(--text-muted); }
+
+/* ---------------------------
+   Example modifiers (optional)
+   Use classes like .accent-green to change the left border color per card type
+   --------------------------- */
+.card.accent-green { border-left-color: #16a34a; }
+.card.accent-purple { border-left-color: #7c3aed; }
+.card.accent-orange { border-left-color: #f97316; }
+
+/* ---------------------------
+   End of file
+   --------------------------- */

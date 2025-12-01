@@ -1,0 +1,44 @@
+i have clubs like aptitude club, apex club in programming, communication English club. we are containing a daily/weekly(weekend) basis mcq test.. currently we are doing as google forms and recording the data in note as handwritten format.. we need to automate this for this wee have to create webpage alone setup to automate this and record the data in free cloud database(because this webpage need to run independently) on free host.. using php with sql might helpful.. just analyze my requirement and give me outline of idea then we can continue build that page using coding..
+
+i will give my frontend idea..
+
+there are three users 
+1.admin
+2.club 
+3.test attendees
+
+when a enter into my webpage using url the ui should be
+
+1.for admin
+a.club creating button
+b.club members adding on 
+c.and need option to give access to club roles and test attendees roles management
+d.if the club roles updates a questions means the privilege o post those question to test attendees role should be with admin
+
+2.for club
+for club 
+there are three roles 
+a.secratary
+b.joint seratory
+c.members
+ for secretary
+	1.view club test result button with download data option as button
+	2.ask daily or weekly basis button  then mcq question with option and correct option posting option as button
+	3.status button -> show student name with class and roll no who have attended the test
+ for join secretary
+	1.ask daily or weekly basis button  then mcq question with option and correct option posting option as button
+	2.status button -> show student name with class and roll no who have attended the test
+ for members
+	1.ask daily or weekly basis button  then mcq question with option and correct option posting option as button
+
+3.for test attendee
+signup & login page
+when logged in
+a.daily test
+b.weekly test
+
+in a 
+need date picker end date is current date -> if test attendee picks a date  if he already attented the test in that it have to popup like you have already complted the test the picked date else show the question with options and submit button. 
+in b
+need date picker(only Saturdays) end date is current Saturday(last Saturday) -> if test attendee picks a date  if he already attented the test in that it have to popup like you have already complted the test the picked date else show the question with options and submit button.
+
