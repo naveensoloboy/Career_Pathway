@@ -58,23 +58,22 @@ date_default_timezone_set('Asia/Kolkata');
 // DATABASE SETTINGS
 ////////////////////////////////////
 
-// Defaults (will be used locally if env not set)
+// Defaults (for local if env is missing)
 $dbHost    = getenv('DB_HOST') ?: 'ai-careerpathway2k25-53e5.b.aivencloud.com';
 $dbPort    = getenv('DB_PORT') ?: 19542;
 $dbName    = getenv('DB_NAME') ?: 'mcq_app';
 $dbUser    = getenv('DB_USER') ?: 'avnadmin';
 $dbCharset = 'utf8mb4';
 
-// 1) Try to get password from environment (Render, prod)
+// 1) Render / production: from environment
 $dbPass = getenv('DB_PASS');
 
-// 2) If not set (local XAMPP), fallback to secrets.php (untracked)
+// 2) Local XAMPP fallback: secrets.php
 if (!$dbPass) {
     $secretsFile = __DIR__ . '/secrets.php';
     if (file_exists($secretsFile)) {
         require $secretsFile;   // defines $dbPass locally
     } else {
-        // TEMP: clear error so you see it in browser instead of silent failure
         die("ERROR: DB_PASS not set in environment and config/secrets.php not found.");
     }
 }
