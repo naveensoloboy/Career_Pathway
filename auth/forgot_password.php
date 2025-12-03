@@ -31,12 +31,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $mail->isSMTP();
             $mail->Host = 'smtp.gmail.com';
             $mail->SMTPAuth = true;
-            $mail->Username = 'naveen9222777@gmail.com'; // Your email address
-            $mail->Password = 'dvxb snoo mosq ntwn'; // Your email password
+            $mail->Username = 'careerpathway2k25@gmail.com'; // Your email address
+            $mail->Password = 'ixjb hvfm bwgb ohhl'; // Your email password
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port = 587;
 
-            $mail->setFrom('your_email@example.com', 'Your App');
+            $mail->setFrom('careerpathway2k25@gmail.com', 'Career Pathway');
             $mail->addAddress($email);
 
             $mail->isHTML(true);

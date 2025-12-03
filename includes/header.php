@@ -10,7 +10,7 @@ $user = current_user($pdo);
 <header style="padding:10px; border-bottom:1px solid #ddd;">
     <div class="container" style="display:flex;justify-content:space-between;align-items:center;">
         <div>
-            <a href="<?= e(BASE_URL) ?>/public/index.php" style="text-decoration:none;"><strong>MCQ Club App</strong></a>
+            <a href="<?= e(BASE_URL) ?>/public/index.php" style="text-decoration:none;"><strong>Career Pathway</strong></a>
         </div>
         <nav>
             <?php if ($user): ?>

@@ -181,18 +181,19 @@ $view_date = isset($_GET['view_date']) ? $_GET['view_date'] : null; // date stri
 // We group across clubs: all pending rows that map to the same test_type+test_date are one group.
 $groupsSql = "
     SELECT
-        COALESCE(t.test_type, 'GENERAL') AS group_type,
-        COALESCE(t.test_date, '') AS group_date,
-        COUNT(q.id) AS pending_count,
-        GROUP_CONCAT(DISTINCT c.name SEPARATOR ', ') AS clubs
+        COALESCE(t.test_type, 'GENERAL')       AS group_type,
+        COALESCE(t.test_date, '0000-00-00')    AS group_date,
+        COUNT(q.id)                            AS pending_count,
+        GROUP_CONCAT(DISTINCT c.name ORDER BY c.name SEPARATOR ', ') AS clubs
     FROM questions_pending q
     JOIN clubs c ON c.id = q.club_id
     LEFT JOIN tests t ON t.id = q.test_id
     WHERE (q.test_id IS NULL)
        OR (t.active = 1 AND q.active = 2)
-    GROUP BY COALESCE(t.test_type, 'GENERAL'), COALESCE(t.test_date, '')
-    ORDER BY COALESCE(t.test_date, '0000-00-00') DESC, GROUP_CONCAT(DISTINCT c.name) ASC
+    GROUP BY group_type, group_date
+    ORDER BY group_date DESC, clubs ASC
 ";
+
 
 $groupsStmt = $pdo->query($groupsSql);
 $groups = $groupsStmt->fetchAll();
@@ -231,9 +232,10 @@ $csrf = csrf_token();
 <head>
     <meta charset="utf-8">
     <title>Approve Questions (grouped by type+date)</title>
-    <link rel="stylesheet" href="<?= BASE_URL ?>/public/css/main.css">
-    <link rel="stylesheet" href="<?= BASE_URL ?>/public/css/header.css">
-    <link rel="stylesheet" href="<?= BASE_URL ?>/public/css/footer.css">
+    <link rel="stylesheet" href="/public/css/main.css">
+    <link rel="stylesheet" href="/public/css/header.css">
+    <link rel="stylesheet" href="/public/css/footer.css">
+    
     <style>
         .groups { display:grid; gap:12px; }
         .group-card { background:#fff;border:1px solid #e6eefb;padding:12px;border-radius:10px; display:flex; justify-content:space-between; align-items:center; gap:12px; }

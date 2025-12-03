@@ -21,14 +21,14 @@ function sendMail(string $to, string $subject, string $message): array
         $mail->isSMTP();
         $mail->Host       = 'smtp.gmail.com';
         $mail->SMTPAuth   = true;
-        $mail->Username   = 'naveen9222777@gmail.com';      // your Gmail
-        $mail->Password   = 'dvxb snoo mosq ntwn';      // your *app password* (not normal pwd)
+        $mail->Username   = 'careerpathway2k25@gmail.com';      // your Gmail
+        $mail->Password   = 'ixjb hvfm bwgb ohhl';      // your *app password* (not normal pwd)
         $mail->SMTPSecure = 'tls';
         $mail->Port       = 587;
         $mail->CharSet    = 'UTF-8';
 
         // Sender
-        $mail->setFrom('naveen9222777@gmail.com', 'Career Pathway');
+        $mail->setFrom('careerpathway2k25@gmail.com', 'Career Pathway');
 
         // Recipient
         $mail->addAddress($to);

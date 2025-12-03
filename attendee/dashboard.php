@@ -175,10 +175,10 @@ if (is_admin($pdo) && (isset($_GET['overall']) && $_GET['overall'] == '1')) {
 <head>
     <meta charset="utf-8">
     <title>Dashboard — Attendee</title>
-    <link rel="stylesheet" href="<?= e(BASE_URL) ?>/public/css/main.css">
-    <link rel="stylesheet" href="<?= e(BASE_URL) ?>/public/css/header.css">
-    <link rel="stylesheet" href="<?= e(BASE_URL) ?>/public/css/dashboard.css">
-    <link rel="stylesheet" href="<?= e(BASE_URL) ?>/public/css/footer.css">
+    <link rel="stylesheet" href="/public/css/main.css">
+    <link rel="stylesheet" href="/public/css/header.css">
+    <link rel="stylesheet" href="/public/css/footer.css">
+    <link rel="stylesheet" href="/public/css/dashboard.css">
     <style>
         /* small enhancements for club action cards */
         .club-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
@@ -215,8 +215,17 @@ if (is_admin($pdo) && (isset($_GET['overall']) && $_GET['overall'] == '1')) {
         <h2>Welcome, <?= esc($user['full_name'] ?? $roll) ?></h2>
         <div style="display:flex; gap:8px; align-items:center;">
             <?php if (is_admin($pdo)): ?>
-                <a class="btn btn-primary" href="<?= e(BASE_URL) ?>/admin/dashboard.php">Admin Dashboard</a>
-                
+                <a class="btn btn-primary" href="<?= e(BASE_URL) ?>/admin/dashboard.php">Admin Dashboard</a>  
+            <?php endif; ?>
+
+            <!-- && (!is_admin($pdo)) -->
+             
+            <?php if (!empty($clubRoles) ): ?>  
+                <?php $firstClubId = (int)$clubRoles[0]['club_id']; ?>
+                <a class="btn btn-primary"
+                   href="<?= e(BASE_URL) ?>/club/dashboard.php?club_id=<?= $firstClubId ?>">
+                    Club Dashboard
+                </a>
             <?php endif; ?>
         </div>
     </div>
@@ -272,7 +281,7 @@ if (is_admin($pdo) && (isset($_GET['overall']) && $_GET['overall'] == '1')) {
 
     <br><br>
 
-    <div class="section-heading" style="margin-bottom:0.75rem;">
+    <!-- <div class="section-heading" style="margin-bottom:0.75rem;">
         <h3 style="margin:0;">Your Club Actions</h3>
         <div style="color:#64748b; font-size:0.95rem;">Quick access to tasks for clubs you belong to</div>
     </div><BR>
@@ -309,133 +318,15 @@ if (is_admin($pdo) && (isset($_GET['overall']) && $_GET['overall'] == '1')) {
                 </div>
             <?php endforeach; ?>
         </div>
-    <?php endif; ?>
+    <?php endif; ?> -->
 
     <br>
 
-    <?php if (is_admin($pdo) && !empty($adminAllClubs)): ?>
-        <hr style="margin:1.25rem 0; border:0; border-bottom:1px solid #e6eefb;">
-        <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
-            <h3 style="margin:0;">Admin — All Clubs</h3>
-            <div style="color:#64748b; font-size:0.95rem;">Admin-level controls for each club</div>
-        </div>
-
-        <br>
-
-        <div class="club-actions" role="list" style="margin-top:12px;">
-            <?php foreach ($adminAllClubs as $ac):
-                $clubId = (int)$ac['id'];
-            ?>
-                <div class="club-card" role="listitem">
-                    <h4><?= esc($ac['name']) ?> <span class="admin-badge">admin</span></h4>
-
-                    <br><br>
-
-                    <div class="club-actions-row">
-                        <!-- Admin-level club actions -->
-                        <a class="btn-sm btn-primary" href="<?= e(BASE_URL) ?>/club/results.php?club_id=<?= $clubId ?>">View Results</a>
-                    </div>
-                </div>
-            <?php endforeach; ?>
-        </div>
-    <?php endif; ?>
-
-    <br>
-
-    <!-- Overall report button -->
-    <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
-        <h2>OVERALL TEST REPORT</h2>
-        <div style="display:flex; gap:8px; align-items:center;">
-            <?php if (!$showOverall): ?>
-                <a class="btn btn-primary" href="?overall=1">Overall Report</a>
-            <?php else: ?>
-                <a class="btn btn-ghost" href="<?= e(BASE_URL) ?>/attendee/dashboard.php">Close Report</a>
-            <?php endif; ?>
-        </div>
-    </div>
     
 
-    <!-- Overall report (admin only) -->
+ 
+
     
-    <hr style="margin:1.5rem 0; border:0; border-bottom:1px solid #e6eefb;">
-
-    <!-- <p class="small-note">Daily: grouped by date (same roll on same date summed). Weekly: grouped by type + date.</p> -->
-
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:18px; align-items:start;">
-        <section>
-            <h4>Daily Tests</h4><br>
-            <?php if (empty($dailyGrouped)): ?>
-                <div class="muted">No daily attempts found.</div>
-            <?php else: ?>
-                <?php foreach ($dailyGrouped as $date => $grp): ?>
-                    <div style="margin-bottom:10px;">
-                        <div style="font-weight:700; margin-bottom:6px;"><?= htmlspecialchars($grp['label'], ENT_QUOTES, 'UTF-8') ?></div>
-                        <div style="background:#fff;border:1px solid #eef2ff;border-radius:8px;padding:8px;overflow:auto;">
-                            <table style="width:100%;border-collapse:collapse;">
-                                <thead style="color:#64748b;font-weight:700;">
-                                    <tr>
-                                        <th style="padding:8px;text-align:left">Name</th>
-                                        <th style="padding:8px;text-align:left">Roll</th>
-                                        <th style="padding:8px;text-align:left">Class</th>
-                                        <th style="padding:8px;text-align:right">Score</th>
-                                        <th style="padding:8px;text-align:right">Total</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach ($grp['items'] as $row): ?>
-                                        <tr>
-                                            <td style="padding:8px;"><?= htmlspecialchars($row['full_name'], ENT_QUOTES, 'UTF-8') ?></td>
-                                            <td style="padding:8px;"><?= htmlspecialchars($row['roll_no'], ENT_QUOTES, 'UTF-8') ?></td>
-                                            <td style="padding:8px;"><?= htmlspecialchars($row['class'], ENT_QUOTES, 'UTF-8') ?></td>
-                                            <td style="padding:8px;text-align:right"><strong><?= (int)$row['score_sum'] ?></strong></td>
-                                            <td style="padding:8px;text-align:right"><?= (int)$row['total_sum'] ?></td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
-            <?php endif; ?>
-        </section>
-
-        <section>
-            <h4>Weekly Tests</h4><br>
-            <?php if (empty($weeklyGrouped)): ?>
-                <div class="muted">No weekly attempts found.</div>
-            <?php else: ?>
-                <?php foreach ($weeklyGrouped as $key => $grp): ?>
-                    <div style="margin-bottom:10px;">
-                        <div style="font-weight:700; margin-bottom:6px;"><?= htmlspecialchars($grp['label'], ENT_QUOTES, 'UTF-8') ?></div>
-                        <div style="background:#fff;border:1px solid #eef2ff;border-radius:8px;padding:8px;overflow:auto;">
-                            <table style="width:100%;border-collapse:collapse;">
-                                <thead style="color:#64748b;font-weight:700;">
-                                    <tr>
-                                        <th style="padding:8px;text-align:left">Name</th>
-                                        <th style="padding:8px;text-align:left">Roll</th>
-                                        <th style="padding:8px;text-align:left">Class</th>
-                                        <th style="padding:8px;text-align:right">Score</th>
-                                        <th style="padding:8px;text-align:right">Total</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach ($grp['items'] as $row): ?>
-                                        <tr>
-                                            <td style="padding:8px;"><?= htmlspecialchars($row['full_name'], ENT_QUOTES, 'UTF-8') ?></td>
-                                            <td style="padding:8px;"><?= htmlspecialchars($row['roll_no'], ENT_QUOTES, 'UTF-8') ?></td>
-                                            <td style="padding:8px;"><?= htmlspecialchars($row['class'], ENT_QUOTES, 'UTF-8') ?></td>
-                                            <td style="padding:8px;text-align:right"><strong><?= (int)$row['score_sum'] ?></strong></td>
-                                            <td style="padding:8px;text-align:right"><?= (int)$row['total_sum'] ?></td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
-            <?php endif; ?>
-        </section>
-    </div>
 
 </main>
 

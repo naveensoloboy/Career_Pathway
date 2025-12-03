@@ -17,18 +17,19 @@ if (is_logged_in()) {
 <html>
 <head>
     <meta charset="utf-8">
-    <title>MCQ Club App</title>
+    <title>Career Pathway</title>
     <link rel="stylesheet" href="/public/css/main.css">
     <link rel="stylesheet" href="/public/css/header.css">
     <link rel="stylesheet" href="/public/css/index.css">
     <link rel="stylesheet" href="/public/css/footer.css">
+    
 </head>
 <body>
 <?php include __DIR__ . '/../includes/header.php'; ?>
 
 <main class="container">
-    <h1>Welcome to MCQ Club App</h1>
-    <p>Automate your club MCQ tests — daily and weekly.</p>
+    <h1>Welcome to Career Pathway</h1>
+    <!-- <p>Automate your club MCQ tests — daily and weekly.</p> -->
 </main>
 
     <div class="cards">

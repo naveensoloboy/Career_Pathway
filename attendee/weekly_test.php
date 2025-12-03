@@ -26,9 +26,9 @@ $csrf = csrf_token();
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Weekly Test — Attendee</title>
-    <link rel="stylesheet" href="<?= e(BASE_URL) ?>/public/css/main.css">
-    <link rel="stylesheet" href="<?= e(BASE_URL) ?>/public/css/header.css">
-    <link rel="stylesheet" href="<?= e(BASE_URL) ?>/public/css/footer.css">
+    <link rel="stylesheet" href="/public/css/main.css">
+    <link rel="stylesheet" href="/public/css/header.css">
+    <link rel="stylesheet" href="/public/css/footer.css">
     
     <style>
         /* Page-Specific Styles */

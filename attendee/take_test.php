@@ -101,7 +101,9 @@ $csrf = csrf_token();
 <head>
 <meta charset="utf-8">
 <title>Take Test</title>
-<link rel="stylesheet" href="<?= e(BASE_URL) ?>/public/css/main.css">
+<link rel="stylesheet" href="/public/css/main.css">
+<link rel="stylesheet" href="/public/css/footer.css">
+<link rel="stylesheet" href="/public/css/header.css">
 <style>
     .club-header {
         margin-top:25px;

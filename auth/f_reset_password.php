@@ -92,10 +92,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <h2>Reset Password</h2>
     <form method="POST">
         <label>New Password:</label>
-        <input type="password" name="password" required>
+        <input type="password" name="password" pattern="(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}"
+                           title="Password must have at least 1 capital letter, 1 number, 1 special character and minimum 8 characters." required>
         
         <label>Confirm Password:</label>
-        <input type="password" name="confirm_password" required>
+        <input type="password" name="confirm_password" pattern="(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}"
+                           title="Password must have at least 1 capital letter, 1 number, 1 special character and minimum 8 characters." required>
         
         <button type="submit">Reset Password</button>
     </form>

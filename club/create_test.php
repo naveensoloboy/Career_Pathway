@@ -73,10 +73,10 @@ if (!$clubRow) die('Club not found.');
 <head>
     <meta charset="utf-8">
     <title>Create Test — <?= e($clubRow['name']) ?></title>
-    <link rel="stylesheet" href="<?= e(BASE_URL) ?>/public/css/main.css">
-    <link rel="stylesheet" href="<?= e(BASE_URL) ?>/public/css/header.css">
-    <link rel="stylesheet" href="<?= e(BASE_URL) ?>/public/css/footer.css">
-    <link rel="stylesheet" href="<?= e(BASE_URL) ?>/public/css/create_club.css">
+    <link rel="stylesheet" href="/public/css/main.css">
+    <link rel="stylesheet" href="/public/css/header.css">
+    <link rel="stylesheet" href="/public/css/footer.css">
+    <link rel="stylesheet" href="/public/css/create_club.css">
     <script>
 function enforceSaturday() {
     const type = document.querySelector('select[name="test_type"]').value;

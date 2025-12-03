@@ -31,9 +31,9 @@ if ($test_id <= 0) {
     <head>
         <meta charset="utf-8">
         <title>Club Tests — Results</title>
-        <link rel="stylesheet" href="<?= e(BASE_URL) ?>/public/css/main.css">
-        <link rel="stylesheet" href="<?= e(BASE_URL) ?>/public/css/header.css">
-        <link rel="stylesheet" href="<?= e(BASE_URL) ?>/public/css/footer.css">
+        <link rel="stylesheet" href="/public/css/main.css">
+        <link rel="stylesheet" href="/public/css/header.css">
+        <link rel="stylesheet" href="/public/css/footer.css">
         <style>
             .container { max-width:980px; margin:20px auto; padding:16px; font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial; }
             h2 { margin-bottom:12px; }

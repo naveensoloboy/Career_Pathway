@@ -117,10 +117,10 @@ $csrf = csrf_token();
 <head>
     <meta charset="utf-8">
     <title>Add Question — Club</title>
-    <link rel="stylesheet" href="<?= e(BASE_URL) ?>/public/css/main.css">
-    <link rel="stylesheet" href="<?= e(BASE_URL) ?>/public/css/header.css">
-    <link rel="stylesheet" href="<?= e(BASE_URL) ?>/public/css/footer.css">
-    <link rel="stylesheet" href="<?= e(BASE_URL) ?>/public/css/create_club.css">
+    <link rel="stylesheet" href="/public/css/main.css">
+    <link rel="stylesheet" href="/public/css/header.css">
+    <link rel="stylesheet" href="/public/css/footer.css">
+    <link rel="stylesheet" href="/public/css/create_club.css">
     <style>
         .q-block { border:1px solid rgba(15,23,42,0.04); padding:12px; border-radius:10px; margin-bottom:12px; background:#fff; }
         .q-actions { text-align:right; margin-top:8px; }

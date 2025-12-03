@@ -85,6 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $password2 = $_POST['password2'] ?? '';
             $full_name = trim($_POST['full_name'] ?? '');
             $class     = trim($_POST['class'] ?? '');
+            $batch     = trim($_POST['batch'] ?? '');
 
             if ($roll_no === '')           $errors[] = 'Roll number is required.';
             if ($full_name === '')         $errors[] = 'Full name is required.';
@@ -105,15 +106,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $pdo->beginTransaction();
 
                         // create user as inactive until OTP verification
-                        $ins = $pdo->prepare('INSERT INTO users (roll_no, email, password_hash, full_name, role, class, is_active) 
-                                              VALUES (:roll, :email, :pw, :full, :role, :class, 0)');
+                        $ins = $pdo->prepare('INSERT INTO users (roll_no, email, password_hash, full_name, role, class, batch, is_active) 
+                                              VALUES (:roll, :email, :pw, :full, :role, :class, :batch, 0)');
                         $ins->execute([
                             ':roll'  => $roll_no,
                             ':email' => $email,
                             ':pw'    => $pwHash,
                             ':full'  => $full_name,
                             ':role'  => 'attendee',
-                            ':class' => $class
+                            ':class' => $class,
+                            ':batch' => $batch
                         ]);
 
                         // create 6-digit OTP and store its hash in email_verifications
@@ -136,9 +138,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $pdo->commit();
 
                         // build OTP email (no link, just code)
-                        $subject = 'Your MCQ Club App verification code';
+                        $subject = 'Career pathway verification code';
                         $html  = "<p>Hello " . e($full_name) . ",</p>";
-                        $html .= "<p>Your verification code for MCQ Club App is:</p>";
+                        $html .= "<p>Your verification code for career pathway is:</p>";
                         $html .= "<p><strong>" . e($otp) . "</strong></p>";
                         $html .= "<p>This code will expire in 24 hours. If you didn't register, you can ignore this email.</p>";
 
@@ -174,10 +176,10 @@ $token = csrf_token();
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Register — MCQ Club App</title>
-    <link rel="stylesheet" href="<?= e(BASE_URL) ?>/public/css/main.css">
-    <link rel="stylesheet" href="<?= e(BASE_URL) ?>/public/css/header.css">
-    <link rel="stylesheet" href="<?= e(BASE_URL) ?>/public/css/footer.css">
+    <title>Register — Career Pathway</title>
+    <link rel="stylesheet" href="/public/css/main.css">
+    <link rel="stylesheet" href="/public/css/header.css">
+    <link rel="stylesheet" href="/public/css/footer.css">
     <style>
         .container1 {
             max-width: 580px;
@@ -328,8 +330,8 @@ $token = csrf_token();
                     <label>Full Name *</label><br>
                     <input type="text" name="full_name" value="<?= e($_POST['full_name'] ?? '') ?>" required><br><br>
 
-                    <label>Class *</label><br>
-                    <select name="class" required>
+                    <label>Class</label><br>
+                    <select name="class">
                         <option value="">Select your class</option>
                         <option value="I - MCA"            <?= (($_POST['class'] ?? '') === 'I - MCA') ? 'selected' : '' ?>>I - MCA</option>
                         <option value="II - MCA"           <?= (($_POST['class'] ?? '') === 'II - MCA') ? 'selected' : '' ?>>II - MCA</option>
@@ -338,14 +340,25 @@ $token = csrf_token();
                         <option value="III - B.Sc (CS)"    <?= (($_POST['class'] ?? '') === 'III - B.Sc (CS)') ? 'selected' : '' ?>>III - B.Sc (CS)</option>
                     </select><br><br>
 
+                    <label>Batch * (Example : 2025-2027 or 2025-2028)</label>
+                    <input type="text" name="batch" value="<?= e($_POST['batch'] ?? '') ?>" pattern="\d{4}-\d{4}"><br><br>
+
                     <label>Email *</label><br>
                     <input type="email" name="email" value="<?= e($_POST['email'] ?? '') ?>" required><br><br>
 
                     <label>Password *</label><br>
-                    <input type="password" name="password" required><br><br>
+                    <input type="password"
+                           name="password"
+                           pattern="(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}"
+                           title="Password must have at least 1 capital letter, 1 number, 1 special character and minimum 8 characters."
+                           required><br><br>
 
                     <label>Confirm Password *</label><br>
-                    <input type="password" name="password2" required><br><br>
+                    <input type="password"
+                           name="password2"
+                           pattern="(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}"
+                           title="Password must have at least 1 capital letter, 1 number, 1 special character and minimum 8 characters."
+                           required><br><br>
 
                     <button type="submit">Register</button>
                 </form>

@@ -55,10 +55,10 @@ $csrf = csrf_token();
 <head>
     <meta charset="utf-8">
     <title>Manage Club Roles</title>
-    <link rel="stylesheet" href="<?= BASE_URL ?>/public/css/header.css">
-    <link rel="stylesheet" href="<?= BASE_URL ?>/public/css/main.css">
-    <link rel="stylesheet" href="<?= BASE_URL ?>/public/css/create_club.css">
-    <link rel="stylesheet" href="<?= BASE_URL ?>/public/css/footer.css">
+    <link rel="stylesheet" href="/public/css/main.css">
+    <link rel="stylesheet" href="/public/css/header.css">
+    <link rel="stylesheet" href="/public/css/footer.css">
+    <link rel="stylesheet" href="/public/css/create_club.css">
 </head>
 <body>
 <?php include __DIR__ . '/../includes/header.php'; ?>

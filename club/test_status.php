@@ -199,9 +199,9 @@ if ($test_id <= 0) {
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Tests — Status</title>
-        <link rel="stylesheet" href="<?= e(BASE_URL) ?>/public/css/main.css">
-        <link rel="stylesheet" href="<?= e(BASE_URL) ?>/public/css/header.css">
-        <link rel="stylesheet" href="<?= e(BASE_URL) ?>/public/css/footer.css">
+        <link rel="stylesheet" href="/public/css/main.css">
+        <link rel="stylesheet" href="/public/css/header.css">
+        <link rel="stylesheet" href="/public/css/footer.css">
         <?= $custom_css ?>
     </head>
     <body>
@@ -285,9 +285,9 @@ $attendees = $stm->fetchAll();
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Test Status</title>
-    <link rel="stylesheet" href="<?= e(BASE_URL) ?>/public/css/main.css">
-        <link rel="stylesheet" href="<?= e(BASE_URL) ?>/public/css/header.css">
-        <link rel="stylesheet" href="<?= e(BASE_URL) ?>/public/css/footer.css">
+    <link rel="stylesheet" href="/public/css/main.css">
+        <link rel="stylesheet" href="/public/css/header.css">
+        <link rel="stylesheet" href="/public/css/footer.css">
     <?= $custom_css ?>
 </head>
 <body>
@@ -349,9 +349,11 @@ $attendees = $stm->fetchAll();
         </div>
 
         <div class="action-bar">
-            <a href="<?= e(BASE_URL) ?>/club/results.php?club_id=<?= (int)$club_id ?>&test_id=<?= (int)$test_id ?>" class="btn">
-                Download Report
-            </a>
+            <?php if ($role && in_array($role['role'], ['club_secretary'], true)): ?>
+                <a href="<?= e(BASE_URL) ?>/club/results.php?club_id=<?= (int)$club_id ?>&test_id=<?= (int)$test_id ?>" class="btn">
+                    Download Report
+                </a>
+            <?php endif; ?>
         </div>
     <?php endif; ?>
 </main>

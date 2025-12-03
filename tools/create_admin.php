@@ -1,9 +1,10 @@
 <?php
 // tools/create_admin.php
 require_once __DIR__ . '/../config/config.php';
+require_once __DIR__ . '/../config/phpmailer_config.php'; // expects send_mail($to,$subject,$html) helper
 
 // -----------------------------
-// CLI MODE
+// CLI MODE (unchanged)
 // -----------------------------
 if (php_sapi_name() === 'cli') {
     echo "Enter Admin Roll Number: ";
@@ -25,93 +26,203 @@ if (php_sapi_name() === 'cli') {
 
     $hash = password_hash($password, PASSWORD_DEFAULT);
 
-    // create or update user table
-    $stmt = $pdo->prepare('SELECT roll_no FROM users WHERE roll_no = :roll LIMIT 1');
-    $stmt->execute([':roll' => $roll]);
+    // // create or update user table
+    // $stmt = $pdo->prepare('SELECT roll_no FROM users WHERE roll_no = :roll LIMIT 1');
+    // $stmt->execute([':roll' => $roll]);
 
-    if ($stmt->fetch()) {
-        $upd = $pdo->prepare('UPDATE users SET email = :email, password_hash = :pw, full_name = :full, role = :role, is_active = 1 WHERE roll_no = :roll');
-        $upd->execute([':email' => $email, ':pw' => $hash, ':full' => $full, ':role' => 'admin', ':roll' => $roll]);
-        echo "Updated existing user {$roll} as admin.\n";
-    } else {
-        $ins = $pdo->prepare('INSERT INTO users (roll_no, email, password_hash, full_name, role, class, is_active)
-                              VALUES (:roll, :email, :pw, :full, :role, NULL, 1)');
-        $ins->execute([':roll' => $roll, ':email' => $email, ':pw' => $hash, ':full' => $full, ':role' => 'admin']);
-        echo "Created admin user {$roll}.\n";
-    }
+    // if ($stmt->fetch()) {
+    //     $upd = $pdo->prepare('UPDATE users SET email = :email, password_hash = :pw, full_name = :full, role = :role, is_active = 1 WHERE roll_no = :roll');
+    //     $upd->execute([':email' => $email, ':pw' => $hash, ':full' => $full, ':role' => 'admin', ':roll' => $roll]);
+    //     echo "Updated existing user {$roll} as admin.\n";
+    // } else {
+    //     $ins = $pdo->prepare('INSERT INTO users (roll_no, email, password_hash, full_name, role, class, is_active)
+    //                           VALUES (:roll, :email, :pw, :full, :role, NULL, 1)');
+    //     $ins->execute([':roll' => $roll, ':email' => $email, ':pw' => $hash, ':full' => $full, ':role' => 'admin']);
+    //     echo "Created admin user {$roll}.\n";
+    // }
 
     // create or update admin table
     $stmt2 = $pdo->prepare('SELECT roll_no FROM admin WHERE roll_no = :roll LIMIT 1');
     $stmt2->execute([':roll' => $roll]);
 
     if ($stmt2->fetch()) {
-        $updA = $pdo->prepare('UPDATE admin SET email = :email, full_name = :full WHERE roll_no = :roll');
-        $updA->execute([':email' => $email, ':full' => $full, ':roll' => $roll]);
-        echo "Updated admin table entry.\n";
+        $updA = $pdo->prepare('UPDATE admin SET email = :email, full_name = :full, password = :pass WHERE roll_no = :roll');
+        $updA->execute([':email' => $email, ':full' => $full, ':pass' => $hash, ':roll' => $roll]);
+        echo "Admin Updated.\n";
     } else {
-        $insA = $pdo->prepare('INSERT INTO admin (roll_no, email, full_name) VALUES (:roll, :email, :full)');
-        $insA->execute([':roll' => $roll, ':email' => $email, ':full' => $full]);
-        echo "Inserted into admin table.\n";
+        $insA = $pdo->prepare('INSERT INTO admin (roll_no, email, full_name) VALUES (:roll, :email, :full, :pass)');
+        $insA->execute([':roll' => $roll, ':email' => $email, ':full' => $full, ':pass' => $hash]);
+        echo "Admin Added.\n";
     }
 
     echo "Done.\n";
     exit;
 }
 
+
 // -----------------------------
-// BROWSER MODE
+// BROWSER MODE (updated)
 // -----------------------------
 $errors = [];
 $success = null;
 
+// helper: get pending admin from session
+$pendingAdmin = $_SESSION['pending_admin'] ?? null;
+
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-    $roll  = trim($_POST['roll_no'] ?? '');
-    $email = trim($_POST['email'] ?? '');
-    $full  = trim($_POST['full_name'] ?? '');
-    $password = trim($_POST['password'] ?? '');
+    // STEP 2: OTP verification
+    if (isset($_POST['verify_otp'])) {
+        $otp = trim($_POST['otp'] ?? '');
 
-    if ($roll === '' || $email === '' || $password === '') {
-        $errors[] = "Roll number, email, and password are required.";
-    }
-
-    if ($email !== '' && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $errors[] = "Invalid email format.";
-    }
-
-    if (empty($errors)) {
-        $hash = password_hash($password, PASSWORD_DEFAULT);
-
-        // Check users table
-        $stmt = $pdo->prepare('SELECT roll_no FROM users WHERE roll_no = :roll LIMIT 1');
-        $stmt->execute([':roll' => $roll]);
-
-        if ($stmt->fetch()) {
-            $upd = $pdo->prepare('UPDATE users SET email = :email, password_hash = :pw, full_name = :full, role = :role, is_active = 1 WHERE roll_no = :roll');
-            $upd->execute([':email' => $email, ':pw' => $hash, ':full' => $full, ':role' => 'admin', ':roll' => $roll]);
-            $msg = "Updated existing user {$roll} as admin.";
-        } else {
-            $ins = $pdo->prepare('INSERT INTO users (roll_no, email, password_hash, full_name, role, class, is_active)
-                                  VALUES (:roll, :email, :pw, :full, :role, NULL, 1)');
-            $ins->execute([':roll' => $roll, ':email' => $email, ':pw' => $hash, ':full' => $full, ':role' => 'admin']);
-            $msg = "Created admin user {$roll}.";
+        if ($otp === '') {
+            $errors[] = "OTP is required.";
         }
 
-        // Check admin table
-        $stmt2 = $pdo->prepare('SELECT roll_no FROM admin WHERE roll_no = :roll LIMIT 1');
-        $stmt2->execute([':roll' => $roll]);
-
-        if ($stmt2->fetch()) {
-            $updA = $pdo->prepare('UPDATE admin SET email = :email, full_name = :full WHERE roll_no = :roll');
-            $updA->execute([':email' => $email, ':full' => $full, ':roll' => $roll]);
-        } else {
-            $insA = $pdo->prepare('INSERT INTO admin (roll_no, email, full_name) VALUES (:roll, :email, :full)');
-            $insA->execute([':roll' => $roll, ':email' => $email, ':full' => $full]);
+        if (!$pendingAdmin) {
+            $errors[] = "No pending admin to verify. Please submit the admin details again.";
         }
 
-        $success = $msg . " Also saved to admin table.";
+        if (empty($errors)) {
+            $roll = $pendingAdmin['roll'];
+            $email = $pendingAdmin['email'];
+            $full = $pendingAdmin['full_name'];
+            $hash = $pendingAdmin['password_hash'];
+
+            try {
+                // fetch OTP row
+                $stmtOtp = $pdo->prepare('SELECT token_hash, expires_at FROM email_verifications WHERE roll_no = :roll LIMIT 1');
+                $stmtOtp->execute([':roll' => $roll]);
+                $rowOtp = $stmtOtp->fetch(PDO::FETCH_ASSOC);
+
+                if (!$rowOtp) {
+                    $errors[] = "No OTP found or it has expired. Please recreate the admin.";
+                } else {
+                    $now = new DateTime();
+                    $exp = new DateTime($rowOtp['expires_at']);
+
+                    if ($exp < $now) {
+                        $errors[] = "OTP has expired. Please recreate the admin.";
+                    } else {
+                        $inputHash = hash('sha256', $otp);
+                        if (!hash_equals($rowOtp['token_hash'], $inputHash)) {
+                            $errors[] = "Invalid OTP.";
+                        }
+                    }
+                }
+
+                if (empty($errors)) {
+                    $pdo->beginTransaction();
+
+                    // upsert admin row only now
+                    $stmt2 = $pdo->prepare('SELECT roll_no FROM admin WHERE roll_no = :roll LIMIT 1');
+                    $stmt2->execute([':roll' => $roll]);
+
+                    if ($stmt2->fetch()) {
+                        $updA = $pdo->prepare('UPDATE admin SET email = :email, full_name = :full, password = :pass WHERE roll_no = :roll');
+                        $updA->execute([
+                            ':email' => $email,
+                            ':full'  => $full,
+                            ':pass'  => $hash,
+                            ':roll'  => $roll
+                        ]);
+                        $msg = "Admin {$roll} updated successfully.";
+                    } else {
+                        $insA = $pdo->prepare('INSERT INTO admin (roll_no, email, full_name, password) VALUES (:roll, :email, :full, :pass)');
+                        $insA->execute([
+                            ':roll' => $roll,
+                            ':email'=> $email,
+                            ':full' => $full,
+                            ':pass' => $hash
+                        ]);
+                        $msg = "Admin {$roll} created successfully.";
+                    }
+
+                    // remove OTP after success
+                    $pdo->prepare('DELETE FROM email_verifications WHERE roll_no = :roll')->execute([':roll' => $roll]);
+
+                    $pdo->commit();
+
+                    // clear pending data
+                    unset($_SESSION['pending_admin']);
+                    $pendingAdmin = null;
+
+                    $success = $msg;
+                }
+            } catch (Exception $e) {
+                if ($pdo->inTransaction()) $pdo->rollBack();
+                $errors[] = "Error verifying OTP: " . $e->getMessage();
+            }
+        }
+
+    // STEP 1: create pending admin + send OTP
+    } else {
+        $roll  = trim($_POST['roll_no'] ?? '');
+        $email = trim($_POST['email'] ?? '');
+        $full  = trim($_POST['full_name'] ?? '');
+        $password = trim($_POST['password'] ?? '');
+
+        if ($roll === '' || $email === '' || $password === '') {
+            $errors[] = "Roll number, email, and password are required.";
+        }
+
+        if ($email !== '' && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $errors[] = "Invalid email format.";
+        }
+
+        if (empty($errors)) {
+            $hash = password_hash($password, PASSWORD_DEFAULT);
+
+            try {
+                // Generate OTP + save hashed OTP
+                $otp = str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+                $tokenHash = hash('sha256', $otp);
+                $expiresAt = (new DateTime('+30 minutes'))->format('Y-m-d H:i:s');
+
+                // store OTP
+                $pdo->prepare('DELETE FROM email_verifications WHERE roll_no = :roll')->execute([':roll' => $roll]);
+                $insToken = $pdo->prepare('INSERT INTO email_verifications (roll_no, token_hash, expires_at) VALUES (:r, :th, :exp)');
+                $insToken->execute([':r' => $roll, ':th' => $tokenHash, ':exp' => $expiresAt]);
+
+                // store pending admin data in session (no DB write yet)
+                $_SESSION['pending_admin'] = [
+                    'roll'          => $roll,
+                    'email'         => $email,
+                    'full_name'     => $full,
+                    'password_hash' => $hash,
+                ];
+                $pendingAdmin = $_SESSION['pending_admin'];
+
+                // send OTP to approver
+                $approver = 'naveen9222777@gmail.com';
+                $subject = "Approve new admin: {$roll}";
+                $html = "<p>Hello,</p>";
+                $html .= "<p>An admin account was requested on your Career Pathway.</p>";
+                $html .= "<p><strong>Admin details</strong><br>";
+                $html .= "Roll: " . htmlspecialchars($roll, ENT_QUOTES) . "<br>";
+                $html .= "Name: " . htmlspecialchars($full, ENT_QUOTES) . "<br>";
+                $html .= "Email: " . htmlspecialchars($email, ENT_QUOTES) . "<br>";
+                $html .= "Time: " . (new DateTime())->format('Y-m-d H:i:s') . "</p>";
+                $html .= "<p>Please approve by entering the following OTP in the admin approval section (valid for 30 minutes):</p>";
+                $html .= "<h2 style='letter-spacing:2px'>" . htmlspecialchars($otp, ENT_QUOTES) . "</h2>";
+                $html .= "<p>If you didn't request this, ignore this email.</p>";
+
+                $mailRes = sendMail($approver, $subject, $html);
+
+                if ($mailRes['success']) {
+                    $success = "OTP has been sent to the approver. Once OTP is verified, the admin will be created/updated.";
+                } else {
+                    $errors[] = "Failed to send OTP email. Please contact the approver manually.";
+                    error_log('Admin approval mail failed: ' . $mailRes['message'] . ' (to ' . $approver . ')');
+                }
+
+            } catch (Exception $e) {
+                $errors[] = 'Database or mail error: ' . $e->getMessage();
+            }
+        }
     }
 }
+
 ?>
 
 <!doctype html>
@@ -245,6 +356,25 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             </div>
         <?php endif; ?>
 
+        <?php if ($pendingAdmin): ?>
+            <!-- OTP verification form -->
+            <div class="note">
+                Pending admin for roll <strong><?= htmlspecialchars($pendingAdmin['roll']) ?></strong>.
+                Please enter the OTP sent to the approver to activate this admin.
+            </div>
+            <form method="post" class="grid" novalidate style="margin-top:10px;">
+                <div class="form-row">
+                    <label for="otp">Enter OTP</label>
+                    <input id="otp" name="otp" type="text" maxlength="6" required>
+                </div>
+                <div class="actions">
+                    <button type="submit" name="verify_otp" class="btn btn-primary">Verify & Activate Admin</button>
+                </div>
+            </form>
+            <hr style="margin:16px 0; border:0; border-bottom:1px dashed #e5e7eb;">
+        <?php endif; ?>
+
+        <!-- Main admin create/update form -->
         <form method="post" class="grid" novalidate>
             <div class="form-row">
                 <label for="roll_no">Roll Number *</label>
@@ -269,15 +399,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             </div>
 
             <div class="actions">
-                <button type="submit" class="btn btn-primary">Create / Update Admin</button>
+                <button type="submit" class="btn btn-primary">Create / Update Admin (Send OTP)</button>
                 <a href="<?= htmlspecialchars(BASE_URL) ?>" class="btn btn-ghost" style="display:inline-flex;align-items:center;justify-content:center;">Back to site</a>
-            </div>
-
-            <div class="footer-note">
-                <div class="note">This creates or updates a user row and an admin table entry. Passwords are hashed using PHP's password_hash().</div>
             </div>
         </form>
     </div>
+
 </div>
 </body>
 </html>

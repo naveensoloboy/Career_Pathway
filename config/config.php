@@ -192,12 +192,30 @@ if (!function_exists('current_user')) {
         return null;
     }
 }
+
 if (!function_exists('is_admin')) {
     function is_admin(PDO $pdo): bool {
-        $u = current_user($pdo);
-        return (bool) ($u && ($u['role'] ?? '') === 'admin');
+        if (!is_logged_in()) {
+            return false;
+        }
+
+        // 1) If we already know from session, trust that
+        if (array_key_exists('is_admin', $_SESSION)) {
+            return (bool) $_SESSION['is_admin'];
+        }
+
+        // 2) Otherwise check admin table by roll_no
+        $stmt = $pdo->prepare('SELECT 1 FROM admin WHERE roll_no = :r LIMIT 1');
+        $stmt->execute([':r' => $_SESSION['user_roll']]);
+        $isAdmin = (bool) $stmt->fetchColumn();
+
+        // Cache in session so we don't query every time
+        $_SESSION['is_admin'] = $isAdmin;
+
+        return $isAdmin;
     }
 }
+
 if (!function_exists('require_admin')) {
     function require_admin(PDO $pdo): void {
         require_login();

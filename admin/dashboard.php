@@ -7,10 +7,10 @@ require_admin($pdo);
 <head>
     <meta charset="utf-8">
     <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="<?= BASE_URL ?>/public/css/main.css">
-    <link rel="stylesheet" href="<?= BASE_URL ?>/public/css/header.css">
-    <link rel="stylesheet" href="<?= BASE_URL ?>/public/css/footer.css">
-    <link rel="stylesheet" href="<?= BASE_URL ?>/public/css/dashboard.css">
+    <link rel="stylesheet" href="/public/css/main.css">
+    <link rel="stylesheet" href="/public/css/header.css">
+    <link rel="stylesheet" href="/public/css/footer.css">
+    <link rel="stylesheet" href="/public/css/dashboard.css">
     
 </head>
 <body>
@@ -28,8 +28,14 @@ require_admin($pdo);
         </div>
 
         <div class="card">
+            <h3>Manage Clubs</h3>
+            <p>Edit club names/descriptions and delete clubs.</p>
+            <a href="<?= e(BASE_URL) ?>/admin/manage_clubs.php">Open</a>
+        </div>
+
+        <div class="card">
             <h3>Manage Club Members</h3>
-            <p>Add / remove users in clubs.</p>
+            <p>Remove users in clubs.</p>
             <a href="<?= BASE_URL ?>/admin/manage_club_members.php">Open</a>
         </div>
 
@@ -43,6 +49,18 @@ require_admin($pdo);
             <h3>Approve Questions</h3>
             <p>Review pending MCQ submissions.</p>
             <a href="<?= BASE_URL ?>/admin/approve_questions.php">Open</a>
+        </div>
+
+        <div class="card">
+            <h3>Approve Club Roles</h3>
+            <p>Review pending club members.</p>
+            <a href="<?= BASE_URL ?>/admin/approve_club_roles.php">Open</a>
+        </div>
+
+        <div class="card">
+            <h3>Reports</h3>
+            <p>View overall test performance and summaries.</p>
+            <a href="<?= BASE_URL ?>/admin/reports.php">Open</a>
         </div>
 
     </div>
